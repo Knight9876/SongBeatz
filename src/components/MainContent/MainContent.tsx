@@ -106,7 +106,7 @@ export const MainContent: React.FC<MainContentProps> = ({
         setCurrentSong(activePlaylist.songs[0]); // 👉 set first song from the playlist
       }
     }
-  }, [activePlaylist, songs]);
+  }, [activePlaylist, songs, setCurrentSong, setPlayQueue]);
 
   return (
     <main className="main-content">

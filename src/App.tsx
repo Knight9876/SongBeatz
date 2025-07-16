@@ -9,7 +9,7 @@ import {
   Song,
   usePlayback,
 } from "./components/PlayerContext/PlayerContext";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 export interface Playlist {
   name: string;
@@ -111,7 +111,7 @@ export function AppContent() {
       setSongs(allSongs);
     }
   })();
-}, [activeView]);
+}, [activeView, setSongs]);
 
 
   const handleLoadFolder = async () => {
@@ -160,7 +160,7 @@ export function AppContent() {
     } else {
       setPlayQueue(songs);
     }
-  }, [activeView, songs]);
+  }, [activeView, songs, activePlaylist, setPlayQueue]);
 
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
@@ -183,7 +183,7 @@ export function AppContent() {
 
     window.addEventListener("keydown", handleKeydown);
     return () => window.removeEventListener("keydown", handleKeydown);
-  }, [handleLoadFolder]);
+  }, [handleLoadFolder, setSongs]);
 
   return (
       <div className="app-container">

@@ -49,6 +49,10 @@ export const PlaybackProvider: React.FC<{ children: React.ReactNode }> = ({
   const [_currentSong, _setCurrentSong] = useState<Song | null>(null);
   const [hasInteracted, setHasInteracted] = useState(false);
 
+  const currentIndex = _currentSong
+    ? playQueue.findIndex((song) => song.path === _currentSong?.path)
+    : -1;
+
   const setCurrentSong = async (song: Song | null) => {
     if (song?.path === _currentSong?.path) {
       console.log("Same song selected, ignoring setCurrentSong");
@@ -77,9 +81,43 @@ export const PlaybackProvider: React.FC<{ children: React.ReactNode }> = ({
     loadLastCurrentSong();
   }, []);
 
-  const currentIndex = _currentSong
-    ? playQueue.findIndex((song) => song.path === _currentSong?.path)
-    : -1;
+  const play = () => {
+    audioRef.current?.play();
+    setIsPlaying(true);
+  };
+
+  const pause = () => {
+    audioRef.current?.pause();
+    setIsPlaying(false);
+  };
+
+  const togglePlay = () => {
+    if (isPlaying) {
+      pause();
+    } else {
+      play();
+    }
+  };
+
+  const next = () => {
+    if (playQueue.length === 0) return;
+    if (currentIndex >= 0 && currentIndex < playQueue.length - 1) {
+      setCurrentSong(playQueue[currentIndex + 1]);
+    } else {
+      // If at end, maybe loop back to first? Optional:
+      setCurrentSong(playQueue[0]);
+    }
+  };
+
+  const prev = () => {
+    if (playQueue.length === 0) return;
+    if (currentIndex > 0) {
+      setCurrentSong(playQueue[currentIndex - 1]);
+    } else {
+      // If at start, maybe go to last? Optional:
+      setCurrentSong(playQueue[playQueue.length - 1]);
+    }
+  };
 
   useEffect(() => {
     if (!audioRef.current || !_currentSong) return;
@@ -125,45 +163,7 @@ export const PlaybackProvider: React.FC<{ children: React.ReactNode }> = ({
       audio.removeEventListener("ended", handleEnded);
       // audio.src = ""; // Clean up audio source
     };
-  }, [_currentSong, hasInteracted]);
-
-  const play = () => {
-    audioRef.current?.play();
-    setIsPlaying(true);
-  };
-
-  const pause = () => {
-    audioRef.current?.pause();
-    setIsPlaying(false);
-  };
-
-  const togglePlay = () => {
-    if (isPlaying) {
-      pause();
-    } else {
-      play();
-    }
-  };
-
-  const next = () => {
-    if (playQueue.length === 0) return;
-    if (currentIndex >= 0 && currentIndex < playQueue.length - 1) {
-      setCurrentSong(playQueue[currentIndex + 1]);
-    } else {
-      // If at end, maybe loop back to first? Optional:
-      setCurrentSong(playQueue[0]);
-    }
-  };
-
-  const prev = () => {
-    if (playQueue.length === 0) return;
-    if (currentIndex > 0) {
-      setCurrentSong(playQueue[currentIndex - 1]);
-    } else {
-      // If at start, maybe go to last? Optional:
-      setCurrentSong(playQueue[playQueue.length - 1]);
-    }
-  };
+  }, [_currentSong, hasInteracted, next]);
 
   return (
     <PlaybackContext.Provider
