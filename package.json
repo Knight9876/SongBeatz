@@ -8,6 +8,11 @@
   "build": {
     "appId": "com.music.songbeatz",
     "productName": "SongBeatz",
+    "publish": [
+      {
+        "provider": "github"
+      }
+    ],
     "directories": {
       "buildResources": "assets"
     },
@@ -22,6 +27,7 @@
         "dmg",
         "zip"
       ],
+      "icon": "assets/album_art_placeholder.icns",
       "sign": false
     },
     "win": {
@@ -32,7 +38,8 @@
       "target": [
         "AppImage",
         "deb"
-      ]
+      ],
+      "icon": "assets/album_art_placeholder.png"
     }
   },
   "homepage": "./",

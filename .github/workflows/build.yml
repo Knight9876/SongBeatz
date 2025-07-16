@@ -10,6 +10,9 @@ jobs:
   build:
     runs-on: macos-latest
 
+    env:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -20,7 +23,7 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run:  npm install --legacy-peer-deps
+        run: npm install --legacy-peer-deps
 
       - name: Clean previous builds
         run: npm run clean
