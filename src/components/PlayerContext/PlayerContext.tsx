@@ -54,22 +54,25 @@ export const PlaybackProvider: React.FC<{ children: React.ReactNode }> = ({
     ? playQueue.findIndex((song) => song.path === _currentSong?.path)
     : -1;
 
-  const setCurrentSong = async (song: Song | null) => {
-    if (song?.path === _currentSong?.path) {
-      console.log("Same song selected, ignoring setCurrentSong");
-      return;
-    }
+  const setCurrentSong = useCallback(
+    async (song: Song | null) => {
+      if (song?.path === _currentSong?.path) {
+        console.log("Same song selected, ignoring setCurrentSong");
+        return;
+      }
 
-    if (song) {
-      // Ask main for album art
-      const art = await window.electronAPI.getAlbumArt(song.path);
-      _setCurrentSong({ ...song, albumArt: art }); // Attach it
-      window.electronAPI.saveCurrentSong(song);
-      setHasInteracted(true);
-    } else {
-      _setCurrentSong(null);
-    }
-  };
+      if (song) {
+        // Ask main for album art
+        const art = await window.electronAPI.getAlbumArt(song.path);
+        _setCurrentSong({ ...song, albumArt: art }); // Attach it
+        window.electronAPI.saveCurrentSong(song);
+        setHasInteracted(true);
+      } else {
+        _setCurrentSong(null);
+      }
+    },
+    [_currentSong, _setCurrentSong, setHasInteracted]
+  );
 
   useEffect(() => {
     const loadLastCurrentSong = async () => {
@@ -109,15 +112,14 @@ export const PlaybackProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [playQueue, currentIndex, setCurrentSong]);
 
-  const prev = () => {
+  const prev = useCallback(() => {
     if (playQueue.length === 0) return;
     if (currentIndex > 0) {
       setCurrentSong(playQueue[currentIndex - 1]);
     } else {
-      // If at start, maybe go to last? Optional:
       setCurrentSong(playQueue[playQueue.length - 1]);
     }
-  };
+  }, [playQueue, currentIndex, setCurrentSong]);
 
   useEffect(() => {
     if (!audioRef.current || !_currentSong) return;
