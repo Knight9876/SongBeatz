@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import { TitleBar } from "./components/TitleBar/TitleBar";
 import { Sidebar } from "./components/Sidebar/Sidebar";
@@ -98,23 +98,22 @@ export function AppContent() {
   };
 
   useEffect(() => {
-  (async () => {
-    const allSongs = await window.electronAPI.getSongs(); // ✅ filtered on disk
-    const favorites = await window.electronAPI.getFavorites();
+    (async () => {
+      const allSongs = await window.electronAPI.getSongs(); // ✅ filtered on disk
+      const favorites = await window.electronAPI.getFavorites();
 
-    if (activeView === "favorites") {
-      const validFavorites = favorites.filter(fav =>
-        allSongs.find(s => s.path === fav.path)
-      );
-      setSongs(validFavorites);
-    } else {
-      setSongs(allSongs);
-    }
-  })();
-}, [activeView, setSongs]);
+      if (activeView === "favorites") {
+        const validFavorites = favorites.filter((fav) =>
+          allSongs.find((s) => s.path === fav.path)
+        );
+        setSongs(validFavorites);
+      } else {
+        setSongs(allSongs);
+      }
+    })();
+  }, [activeView, setSongs]);
 
-
-  const handleLoadFolder = async () => {
+  const handleLoadFolder = useCallback(async () => {
     const result = await window.electronAPI.openMusicFolder();
     const updated = result.map((newSong) => {
       const existing = songs.find((s) => s.path === newSong.path);
@@ -124,7 +123,7 @@ export function AppContent() {
     });
     setSongs(updated);
     window.electronAPI.saveSongs(updated);
-  };
+  }, [songs, setSongs]);
 
   const handleDeleteSong = async (song: Song) => {
     const confirm = window.confirm(`Delete ${song.name} permanently?`);
@@ -186,69 +185,69 @@ export function AppContent() {
   }, [handleLoadFolder, setSongs]);
 
   return (
-      <div className="app-container">
-        <TitleBar />
-        <div className="app-body">
-          <Sidebar setActiveView={setActiveView} />
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <MainContent
-                  songs={displayedSongs}
-                  onLoadFolder={handleLoadFolder}
-                  onDeleteSong={handleDeleteSong}
-                  toggleFavorite={toggleFavorite}
-                  playlists={playlists}
-                  activePlaylist={activePlaylist}
-                  setActivePlaylist={setActivePlaylist}
-                  onCreatePlaylist={handleCreatePlaylist}
-                  onAddSongToPlaylist={handleAddSongToPlaylist}
-                  onDeletePlaylist={handleDeletePlaylist}
-                  onRemoveSongFromPlaylist={handleRemoveSongFromPlaylist}
-                />
-              }
-            />
-            <Route
-              path="/playlists"
-              element={
-                <MainContent
-                  songs={displayedSongs}
-                  onLoadFolder={handleLoadFolder}
-                  onDeleteSong={handleDeleteSong}
-                  toggleFavorite={toggleFavorite}
-                  playlists={playlists}
-                  activePlaylist={activePlaylist}
-                  setActivePlaylist={setActivePlaylist}
-                  onCreatePlaylist={handleCreatePlaylist}
-                  onAddSongToPlaylist={handleAddSongToPlaylist}
-                  onDeletePlaylist={handleDeletePlaylist}
-                  onRemoveSongFromPlaylist={handleRemoveSongFromPlaylist}
-                />
-              }
-            />
-            <Route
-              path="/favorites"
-              element={
-                <MainContent
-                  songs={displayedSongs}
-                  onLoadFolder={handleLoadFolder}
-                  onDeleteSong={handleDeleteSong}
-                  toggleFavorite={toggleFavorite}
-                  playlists={playlists}
-                  activePlaylist={activePlaylist}
-                  setActivePlaylist={setActivePlaylist}
-                  onCreatePlaylist={handleCreatePlaylist}
-                  onAddSongToPlaylist={handleAddSongToPlaylist}
-                  onDeletePlaylist={handleDeletePlaylist}
-                  onRemoveSongFromPlaylist={handleRemoveSongFromPlaylist}
-                />
-              }
-            />
-          </Routes>
-        </div>
-        <PlayerControls />
+    <div className="app-container">
+      <TitleBar />
+      <div className="app-body">
+        <Sidebar setActiveView={setActiveView} />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <MainContent
+                songs={displayedSongs}
+                onLoadFolder={handleLoadFolder}
+                onDeleteSong={handleDeleteSong}
+                toggleFavorite={toggleFavorite}
+                playlists={playlists}
+                activePlaylist={activePlaylist}
+                setActivePlaylist={setActivePlaylist}
+                onCreatePlaylist={handleCreatePlaylist}
+                onAddSongToPlaylist={handleAddSongToPlaylist}
+                onDeletePlaylist={handleDeletePlaylist}
+                onRemoveSongFromPlaylist={handleRemoveSongFromPlaylist}
+              />
+            }
+          />
+          <Route
+            path="/playlists"
+            element={
+              <MainContent
+                songs={displayedSongs}
+                onLoadFolder={handleLoadFolder}
+                onDeleteSong={handleDeleteSong}
+                toggleFavorite={toggleFavorite}
+                playlists={playlists}
+                activePlaylist={activePlaylist}
+                setActivePlaylist={setActivePlaylist}
+                onCreatePlaylist={handleCreatePlaylist}
+                onAddSongToPlaylist={handleAddSongToPlaylist}
+                onDeletePlaylist={handleDeletePlaylist}
+                onRemoveSongFromPlaylist={handleRemoveSongFromPlaylist}
+              />
+            }
+          />
+          <Route
+            path="/favorites"
+            element={
+              <MainContent
+                songs={displayedSongs}
+                onLoadFolder={handleLoadFolder}
+                onDeleteSong={handleDeleteSong}
+                toggleFavorite={toggleFavorite}
+                playlists={playlists}
+                activePlaylist={activePlaylist}
+                setActivePlaylist={setActivePlaylist}
+                onCreatePlaylist={handleCreatePlaylist}
+                onAddSongToPlaylist={handleAddSongToPlaylist}
+                onDeletePlaylist={handleDeletePlaylist}
+                onRemoveSongFromPlaylist={handleRemoveSongFromPlaylist}
+              />
+            }
+          />
+        </Routes>
       </div>
+      <PlayerControls />
+    </div>
   );
 }
 

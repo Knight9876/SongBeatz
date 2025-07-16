@@ -4,6 +4,7 @@ import React, {
   useRef,
   useEffect,
   useState,
+  useCallback,
 } from "react";
 
 export interface Song {
@@ -99,15 +100,14 @@ export const PlaybackProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const next = () => {
+  const next = useCallback(() => {
     if (playQueue.length === 0) return;
     if (currentIndex >= 0 && currentIndex < playQueue.length - 1) {
       setCurrentSong(playQueue[currentIndex + 1]);
     } else {
-      // If at end, maybe loop back to first? Optional:
       setCurrentSong(playQueue[0]);
     }
-  };
+  }, [playQueue, currentIndex, setCurrentSong]);
 
   const prev = () => {
     if (playQueue.length === 0) return;
