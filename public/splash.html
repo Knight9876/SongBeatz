@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SongBeatz Loading...</title>
+<style>
+  body {
+    margin: 0;
+    background: #111;
+    color: #0ff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .logo {
+    width: 120px;
+    height: 120px;
+    border: 4px solid #0ff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 20px #0ff;
+  }
+
+  .logo:before {
+    content: "🎵";
+    font-size: 50px;
+    animation: spin 3s linear infinite;
+  }
+
+  h1 {
+    margin: 20px 0 0;
+    font-size: 1.5em;
+    text-shadow: 0 0 10px #0ff;
+  }
+
+  p {
+    margin-top: 10px;
+    font-size: 0.9em;
+    opacity: 0.7;
+    animation: blink 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0% { box-shadow: 0 0 10px #0ff; }
+    50% { box-shadow: 0 0 30px #0ff; }
+    100% { box-shadow: 0 0 10px #0ff; }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0); }
+    100% { transform: rotate(360deg); }
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+  <div class="logo"></div>
+  <h1>SongBeatz</h1>
+  <p>Loading your music...</p>
+</body>
+</html>

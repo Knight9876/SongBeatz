@@ -2,26 +2,79 @@
   "name": "music-player",
   "version": "0.1.0",
   "private": true,
+  "main": "build/electron.js",
+  "description": "A beautiful music player built with Electron and React.",
+  "author": "Knight Huxley",
+  "build": {
+    "appId": "com.music.songbeatz",
+    "productName": "SongBeatz",
+    "directories": {
+      "buildResources": "assets"
+    },
+    "files": [
+      "dist/**/*",
+      "build/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "sign": false
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/album_art_placeholder.ico"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    }
+  },
+  "homepage": "./",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-regular-svg-icons": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "@types/conf": "^2.1.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.126",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
+    "conf": "^14.0.0",
+    "electron-store": "^10.1.0",
+    "music-metadata": "^11.6.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.3",
     "react-scripts": "5.0.1",
-    "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "clean": "rimraf dist",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron-build": "tsc -p tsconfig.electron.json",
+    "electron": "electron .",
+    "watch:electron": "tsc -p tsconfig.electron.json --watch",
+    "dev:electron": "nodemon",
+    "dev": "concurrently \"npm:start\" \"npm:watch:electron\" \"wait-on http://localhost:3000 && npm run dev:electron\"",
+    "electron-pack:win": "electron-builder --win",
+    "electron-pack:mac": "electron-builder --mac",
+    "electron-pack:linux": "electron-builder --linux",
+    "electron-pack:all": "electron-builder -mwl",
+    "dist": "npm run clean && npm run build && npm run electron-build && electron-builder --win"
   },
   "eslintConfig": {
     "extends": [
@@ -40,5 +93,15 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.0",
+    "dotenv": "^17.0.1",
+    "electron": "^37.2.0",
+    "electron-builder": "^26.0.12",
+    "nodemon": "^3.1.10",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.8.3",
+    "wait-on": "^8.0.3"
   }
 }

@@ -1,0 +1,138 @@
+.titlebar {
+  height: 36px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1a1a1a;
+  color: #fff;
+  -webkit-app-region: drag;
+  padding: 0 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+}
+
+.window-controls {
+  display: flex;
+  gap: 10px;
+  -webkit-app-region: no-drag;
+  align-items: center;
+  height: 100%;
+}
+
+.window-controls button {
+  background: none;
+  border: none;
+  color: #fff;
+  width: 36px;
+  height: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.1s;
+  font-size: 16px;
+}
+
+.window-controls button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.window-controls button:active {
+  transform: scale(0.95);
+}
+
+.window-controls button.close:hover {
+  background: red;
+}
+
+.shortcuts-btn {
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.shortcuts-modal {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50);
+  right: 0;
+  width: 400px;
+  background: #0f0f0f;
+  color: #fff;
+  border: 2px solid cyan;
+  border-radius: 8px;
+  padding: 1rem;
+  z-index: 9999;
+  animation: slideDown 0.3s ease forwards;
+}
+
+.shortcuts-modal.closing {
+  animation: slideUp 0.3s ease forwards;
+}
+
+.shortcuts-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.shortcuts-content h2 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid cyan;
+}
+
+.shortcuts-content ul {
+  padding-left: 1rem;
+}
+
+.shortcuts-content li {
+  margin: 0.25rem 0;
+}
+
+.close-shortcuts-btn {
+  font-size: 1rem;
+  color: #00ffff;
+  background: none;
+  border: 1px solid #00ffff;
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+
+}
+
+.close-shortcuts-btn:hover {
+  background: #00ffff20;
+  text-shadow: none;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translate(100%, -50%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(0, -50%);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translate(0, -50%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(100%, -50%);
+    opacity: 1;
+  }
+}
+
+.drag-region {
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}

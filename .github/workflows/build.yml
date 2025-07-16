@@ -1,0 +1,50 @@
+name: Build & Package Electron App
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Clean previous builds
+        run: npm run clean
+
+      - name: Build React app
+        run: npm run build
+
+      - name: Build Electron main process
+        run: npm run electron-build
+
+      - name: Package Electron app for macOS
+        run: npm run electron-pack:mac
+
+      - name: Package Electron app for Windows
+        run: npm run electron-pack:win
+
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: SongBeatz-macOS
+          path: dist/*.dmg
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: SongBeatz-Windows
+          path: dist/*.exe

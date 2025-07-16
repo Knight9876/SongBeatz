@@ -1,0 +1,5 @@
+{
+  "watch": ["dist/electron.js", "dist/preload.js"],
+  "exec": "electron dist/electron.js",
+  "ext": "js"
+}
